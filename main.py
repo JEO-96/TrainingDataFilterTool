@@ -17,11 +17,11 @@ class MyApp(QMainWindow):
         file_name = ''
         pixmap = QPixmap(file_name)
         self.lbl_img.setPixmap(pixmap)
+        self.lbl_img.move(0, 0)
         self.setMenu()
         self.setButton()
         self.setWindowTitle('Dataset Filter')
         self.setGeometry(100, 100, 1200, 800)
-        self.setLayout(self.hbox)
         self.show()
 
     def setButton(self):
@@ -32,7 +32,6 @@ class MyApp(QMainWindow):
         next_btn.resize(next_btn.sizeHint())
         next_btn.clicked.connect(self.btnNext_clicked)
         next_btn.move(1100, 400)
-
 
     def setMenu(self):
         menubar = self.menuBar()
@@ -48,20 +47,26 @@ class MyApp(QMainWindow):
     def getFileList(self):
         fname = QFileDialog.getExistingDirectory(self, "Select Directory")
         file_list = os.listdir(fname)
-        file_list_jpg = [file for file in file_list if file.endswith(".png")]
+        file_list_jpg = [os.path.join(fname, file) for file in file_list if file.endswith(".jpg") or file.endswith(".png")]
+        print(file_list_jpg)
         self.img_list = file_list_jpg
         pixmap = QPixmap(self.img_list[0])
+        print(self.img_list[0])
         self.lbl_img.setPixmap(pixmap)
-        self.hbox.addWidget(self.lbl_img)
+        self.lbl_img.move(0, 0)
+        self.repaint()
 
     def btnNext_clicked(self):
         self.img_index += 1
         pixmap = QPixmap(self.img_list[self.img_index])
         self.lbl_img.setPixmap(pixmap)
+        self.repaint()
 
     def btnPrev_clicked(self):
         self.img_index -= 1
         pixmap = QPixmap(self.img_list[self.img_index])
+        self.lbl_img.setPixmap(pixmap)
+        self.repaint()
 
     def center(self):
         qr = self.frameGeometry()
