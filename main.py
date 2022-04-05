@@ -13,6 +13,7 @@ class MyApp(QMainWindow):
         self.setLayout(self.my_layout)
         self.img_index = 0
         self.lbl_img = QLabel(self)
+        self.lbl_img_name = QLabel(self)
         self.img_list = ['']
         self.initUI()
 
@@ -24,6 +25,7 @@ class MyApp(QMainWindow):
         self.setMenu()
         self.setButton()
         self.setWindowTitle('Dataset Filter')
+        self.my_layout.addWidget(self.lbl_img_name, 2, 1)
         self.my_layout.addWidget(self.lbl_img, 1, 1)
         self.show()
 
@@ -31,17 +33,17 @@ class MyApp(QMainWindow):
         prev_btn = QPushButton('Prev', self)
         prev_btn.resize(prev_btn.sizeHint())
         prev_btn.clicked.connect(self.btnPrev_clicked)
-        self.my_layout.addWidget(prev_btn, 2, 0)
+        self.my_layout.addWidget(prev_btn, 3, 0)
 
         del_btn = QPushButton('Del', self)
         del_btn.resize(del_btn.sizeHint())
         del_btn.clicked.connect(self.btnDel_clicked)
-        self.my_layout.addWidget(del_btn, 2, 1)
+        self.my_layout.addWidget(del_btn, 3, 1)
 
         next_btn = QPushButton('Next', self)
         next_btn.resize(next_btn.sizeHint())
         next_btn.clicked.connect(self.btnNext_clicked)
-        self.my_layout.addWidget(next_btn, 2, 2)
+        self.my_layout.addWidget(next_btn, 3, 2)
 
     def setMenu(self):
         menubar = self.menuBar()
@@ -63,15 +65,18 @@ class MyApp(QMainWindow):
         print(file_list_jpg)
         self.img_list = file_list_jpg
         pixmap = QPixmap(self.img_list[0])
-        pixmap.scaledToWidth(800)
-        pixmap.scaledToHeight(800)
         self.lbl_img.setPixmap(pixmap)
+        self.lbl_img_name.setText(self.img_list[0])
         self.repaint()
 
     def btnNext_clicked(self):
-        self.img_index += 1
+        if self.img_index == len(self.img_list):
+            self.img_index = 0
+        else:
+            self.img_index += 1
         pixmap = QPixmap(self.img_list[self.img_index])
         self.lbl_img.setPixmap(pixmap)
+        self.lbl_img_name.setText(self.img_list[self.img_index])
         self.repaint()
 
     def btnDel_clicked(self):
@@ -92,6 +97,7 @@ class MyApp(QMainWindow):
         img_file = os.path.join(img_dir, img_file)
         pixmap = QPixmap(self.img_list[self.img_index + 1])
         self.lbl_img.setPixmap(pixmap)
+        self.lbl_img_name.setText(self.img_list[self.img_index])
         print("레이블링 이미지 파일:", self.img_list[self.img_index])
 
         os.remove(self.img_list.pop(self.img_index))
@@ -102,9 +108,13 @@ class MyApp(QMainWindow):
         print("이미지 제거 성공")
 
     def btnPrev_clicked(self):
-        self.img_index -= 1
+        if self.img_index == 0:
+            self.img_index = len(self.img_list)
+        else:
+            self.img_index -= 1
         pixmap = QPixmap(self.img_list[self.img_index])
         self.lbl_img.setPixmap(pixmap)
+        self.lbl_img_name.setText(self.img_list[self.img_index])
         self.repaint()
 
     def keyPressEvent(self, e):
