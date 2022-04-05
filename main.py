@@ -1,9 +1,8 @@
 import sys
 import os
-import send2trash
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-
+from PyQt5.QtCore import Qt
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -107,6 +106,14 @@ class MyApp(QMainWindow):
         pixmap = QPixmap(self.img_list[self.img_index])
         self.lbl_img.setPixmap(pixmap)
         self.repaint()
+
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_N:
+            self.btnNext_clicked()
+        elif e.key() == Qt.Key_P:
+            self.btnPrev_clicked()
+        elif e.key() == Qt.Key_D:
+            self.btnDel_clicked()
 
 
 if __name__ == '__main__':
