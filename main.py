@@ -84,22 +84,22 @@ class MyApp(QMainWindow):
         label_file = os.path.join(label_dir, label_file)
         img_file, kind = tail.split(".")
         if kind == "jpg":
-            img_file = img_file + "jpg"
+            img_file = img_file + ".jpg"
         elif kind == "png":
-            img_file = img_file + "png"
+            img_file = img_file + ".png"
         else:
             print("지정하지 않은 포멧")
 
         img_file = os.path.join(img_dir, img_file)
-        print(img_file)
         pixmap = QPixmap(self.img_list[self.img_index + 1])
         self.lbl_img.setPixmap(pixmap)
-        print(self.img_list[self.img_index])
-        send2trash.send2trash(self.img_list.pop(self.img_list[self.img_index]))
+        print("레이블링 이미지 파일:", self.img_list[self.img_index])
+
+        os.remove(self.img_list.pop(self.img_index))
         print("레이블링 이미지 제거 성공")
-        send2trash.send2trash(label_file)
+        os.remove(label_file)
         print("레이블 제거 성공")
-        send2trash.send2trash(img_file)
+        os.remove(img_file)
         print("이미지 제거 성공")
 
     def btnPrev_clicked(self):
