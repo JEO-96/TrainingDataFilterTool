@@ -72,6 +72,7 @@ class MyApp(QMainWindow):
     def btnNext_clicked(self):
         if self.img_index == len(self.img_list):
             self.img_index = 0
+            print("마지막 이미지")
         else:
             self.img_index += 1
         pixmap = QPixmap(self.img_list[self.img_index])
@@ -96,6 +97,7 @@ class MyApp(QMainWindow):
 
         img_file = os.path.join(img_dir, img_file)
         pixmap = QPixmap(self.img_list[self.img_index + 1])
+        self.lbl_img_name.setText(self.img_list[self.img_index + 1])
         self.lbl_img.setPixmap(pixmap)
         self.lbl_img_name.setText(self.img_list[self.img_index])
         print("레이블링 이미지 파일:", self.img_list[self.img_index])
