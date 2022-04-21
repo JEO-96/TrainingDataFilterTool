@@ -70,7 +70,7 @@ class MyApp(QMainWindow):
         self.repaint()
 
     def btnNext_clicked(self):
-        if self.img_index == len(self.img_list):
+        if self.img_index == len(self.img_list) - 1:
             self.img_index = 0
             print("마지막 이미지")
         else:
@@ -82,8 +82,8 @@ class MyApp(QMainWindow):
 
     def btnDel_clicked(self):
         head, tail = self.img_list[self.img_index].rsplit("\\", 1)
-        label_dir = os.path.join(head, "label")
-        img_dir = os.path.join(head, "image")
+        label_dir = os.path.join(head, "labels")
+        img_dir = os.path.join(head, "images")
         label_file, _ = tail.split(".")
         label_file = label_file + ".txt"
         label_file = os.path.join(label_dir, label_file)
@@ -94,14 +94,6 @@ class MyApp(QMainWindow):
             img_file = img_file + ".png"
         else:
             print("지정하지 않은 포멧")
-
-        img_file = os.path.join(img_dir, img_file)
-        pixmap = QPixmap(self.img_list[self.img_index + 1])
-        self.lbl_img_name.setText(self.img_list[self.img_index + 1])
-        self.lbl_img.setPixmap(pixmap)
-        self.lbl_img_name.setText(self.img_list[self.img_index])
-        print("레이블링 이미지 파일:", self.img_list[self.img_index])
-
         os.remove(self.img_list.pop(self.img_index))
         print("레이블링 이미지 제거 성공")
         os.remove(label_file)
@@ -109,9 +101,23 @@ class MyApp(QMainWindow):
         os.remove(img_file)
         print("이미지 제거 성공")
 
+        if self.img_index == len(self.img_list) - 1:
+            self.img_index = 0
+            print("마지막 이미지")
+        else:
+            self.img_index += 1
+
+        img_file = os.path.join(img_dir, img_file)
+        pixmap = QPixmap(self.img_list[self.img_index])
+        self.lbl_img_name.setText(self.img_list[self.img_index])
+        self.lbl_img.setPixmap(pixmap)
+        print("레이블링 이미지 파일:", self.img_list[self.img_index])
+
+
+
     def btnPrev_clicked(self):
         if self.img_index == 0:
-            self.img_index = len(self.img_list)
+            self.img_index = len(self.img_list) - 1
         else:
             self.img_index -= 1
         pixmap = QPixmap(self.img_list[self.img_index])
