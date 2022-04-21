@@ -94,10 +94,14 @@ class MyApp(QMainWindow):
             img_file = img_file + ".png"
         else:
             print("지정하지 않은 포멧")
+        img_file = os.path.join(img_dir, img_file)
+        print(self.img_list[self.img_index])
         os.remove(self.img_list.pop(self.img_index))
         print("레이블링 이미지 제거 성공")
+        print(label_file)
         os.remove(label_file)
         print("레이블 제거 성공")
+        print(img_file)
         os.remove(img_file)
         print("이미지 제거 성공")
 
@@ -107,7 +111,7 @@ class MyApp(QMainWindow):
         else:
             self.img_index += 1
 
-        img_file = os.path.join(img_dir, img_file)
+
         pixmap = QPixmap(self.img_list[self.img_index])
         self.lbl_img_name.setText(self.img_list[self.img_index])
         self.lbl_img.setPixmap(pixmap)
